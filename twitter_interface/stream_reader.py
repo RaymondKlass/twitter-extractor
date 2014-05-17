@@ -1,8 +1,7 @@
 from tweepy.streaming import StreamListener
 from tweepy import OAuthHandler
 from tweepy import Stream
-import json
-import pika
+import json, pika
 
 """ Handles the raw stream of data coming from the twitter stream
     Relies on the Tweepy library for twitter integration https://github.com/tweepy/tweepy/ """
@@ -15,9 +14,8 @@ class stream_reader(object):
         self.auth = OAuthHandler(twitter_credentials['consumer_key'], twitter_credentials['consumer_secret'])
         self.auth.set_access_token(twitter_credentials['access_token'], twitter_credentials['access_token_secret'])
         
-        # Lets initiate the queue to send to here - then we'll pass it as a parameter to the listener
-        connection = pika.BlockingConnection(pika.ConnectionParameters(rabbitMQ_credentials['host']))
-        self.rabbitChannel = connection.channel()
+        queue_connection = pika.BlockingConnection(pika.ConnectionParameters(rabbitMQ_credentials['host']))
+        self.rabbitChannel = queue_connection.channel()
         
         self.listener = stdOutListener(self.rabbitChannel)
         
@@ -37,11 +35,11 @@ class stdOutListener(StreamListener):
         self.rabbitChannel = rabbitChannel
     
     def on_data(self, data):
-        data = json.loads(data)
-        print data 
+        
         self.rabbitChannel.basic_publish(exchange = '',
                                          routing_key = 'raw_twitter',
-                                         body = data['text'] ) 
+                                         body = data ) 
+        
         
     
     def on_error(self, status):
