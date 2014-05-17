@@ -1,8 +1,7 @@
 from tweepy.streaming import StreamListener
 from tweepy import OAuthHandler
 from tweepy import Stream
-import json
-import pika
+import json, pika
 
 """ Handles the raw stream of data coming from the twitter stream
     Relies on the Tweepy library for twitter integration https://github.com/tweepy/tweepy/ """
@@ -10,11 +9,15 @@ import pika
 class stream_reader(object):
     
     
-    def __init__(self, twitter_credentials):
+    def __init__(self, twitter_credentials, rabbitMQ_credentials):
         
-        self.listener = stdOutListener('func')
         self.auth = OAuthHandler(twitter_credentials['consumer_key'], twitter_credentials['consumer_secret'])
         self.auth.set_access_token(twitter_credentials['access_token'], twitter_credentials['access_token_secret'])
+        
+        queue_connection = pika.BlockingConnection(pika.ConnectionParameters(rabbitMQ_credentials['host']))
+        self.rabbitChannel = queue_connection.channel()
+        
+        self.listener = stdOutListener(self.rabbitChannel)
         
     
     def start_consuming(self, filter_list):
@@ -28,12 +31,15 @@ class stream_reader(object):
     
 class stdOutListener(StreamListener):
     
-    def __init__(self, word):
-        self.word = word
+    def __init__(self, rabbitChannel):
+        self.rabbitChannel = rabbitChannel
     
     def on_data(self, data):
-        print json.loads(data)
-        print self.word
+        
+        self.rabbitChannel.basic_publish(exchange = '',
+                                         routing_key = 'raw_twitter',
+                                         body = data ) 
+        
         
     
     def on_error(self, status):
