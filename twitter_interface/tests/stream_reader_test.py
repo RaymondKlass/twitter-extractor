@@ -18,7 +18,6 @@ class stream_reader_test(unittest.TestCase):
     
     
     def checkFilter(self):
-        
         pass
     
     
