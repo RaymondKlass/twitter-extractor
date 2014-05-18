@@ -1,5 +1,6 @@
 import unittest
-import sys, os, datetime
+import sys, os, datetime, time
+import pika
 
 path = os.path.dirname(__file__)
 if path:
@@ -14,19 +15,14 @@ class stream_reader_test(unittest.TestCase):
 
     def setUp(self):
         self.tweets = []
-        self.stream_reader = stream_reader(config.data['twitter_credentials'])
+        self.test_queue = 'raw_twitter_automated_test'
+        self.stream_reader = stream_reader(config.data['twitter_credentials'], config.data['rabbitMQ_credentials'], self.test_queue)
     
     
-    def checkFilter(self):
+    def test_filter(self):
         pass
     
     
-    
-    def test2(self):    
-        pairs = [(1,2), (1,4), (8,-5), (10, 0)]
-        
-        for p in pairs:
-            self.assertEqual(self.stream_reader.add2(p[0], p[1]), p[0] + p[1])
             
 
 if __name__ == '__main__':
