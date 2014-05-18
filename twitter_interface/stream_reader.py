@@ -41,6 +41,7 @@ class stdOutListener(StreamListener):
             
     
     def on_data(self, data):
+        print json.loads(data).keys()
         self.rabbit_channel.basic_publish(exchange = '',
                                          routing_key = self.rabbit_queue,
                                          body = data ) 
