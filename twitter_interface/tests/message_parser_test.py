@@ -41,10 +41,29 @@ class message_parser_test(unittest.TestCase):
     
     def test_regex_parser(self):
         
-        message1 = {'text' : 'an alphanumberic12 message'}
+        message1 = {'text' : 'an alphanumberic 1 2 message'}
         parser1 = message_parser(message1)
         
         self.assertTrue(parser1.regex_parser('text', '[a-z]'))
+        self.assertTrue(parser1.regex_parser('text', '[a-z0-9]'))
+        self.assertTrue(not parser1.regex_parser('text', '[@$%]'))
+        self.assertTrue(not parser1.regex_parser('textual', '[a-z]'))
+    
+    def test_contains(self):
+        
+        message1 = {'text' : 'alpha numeric word bank'}
+        parser1 = message_parser(message1)
+        
+        # contains(self, field, search_list, case_sensitive = False, require_all = False):
+        
+        self.assertTrue(parser1.contains('text', 'numeric'))
+        self.assertTrue(parser1.contains('text', 'numeric', case_sensitive=True))
+        self.assertTrue(not parser1.contains('text', 'numeriC', case_sensitive=True))
+        self.assertTrue(parser1.contains('text', 'numeric', require_all = True))
+        self.assertTrue(parser1.contains('text', ['numeric', 'word'], require_all = True))
+        self.assertTrue(not parser1.contains('text', ['numeric', 'wordle'], require_all = True))
+        self.assertTrue(parser1.contains('text', ['numeric'], require_all = True, case_sensitive=True))
+        self.assertTrue(not parser1.contains('texted', 'numeric', require_all = True))
         
 
 if __name__ == '__main__':
