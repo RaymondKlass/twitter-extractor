@@ -13,7 +13,7 @@ class stream_reader(object):
             1. twitter credentials ex. {access_token, access_token_secret, consumer_key, consumer_secret}
             2. function to handle data 
         """
-        
+
         self.auth = OAuthHandler(twitter_credentials['consumer_key'], twitter_credentials['consumer_secret'])
         self.auth.set_access_token(twitter_credentials['access_token'], twitter_credentials['access_token_secret'])
         self.listener = stdOutListener(data_callback)
@@ -41,6 +41,7 @@ class stdOutListener(StreamListener):
         
     def on_error(self, status):
         # log status
+        print status
         pass
         
 

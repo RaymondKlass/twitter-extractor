@@ -1,7 +1,7 @@
-import config as config
 import time
 from twitter_interface.stream_reader import stream_reader
 from twitter_interface.message_parser import message_parser as message_parser
+import config as config
 
 
 def processTexts(data):

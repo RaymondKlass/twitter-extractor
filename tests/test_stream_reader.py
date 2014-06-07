@@ -1,15 +1,16 @@
 import unittest
-import sys, os, datetime, time
+import os
+import sys
+from twitter_interface.stream_reader import stream_reader
 
 path = os.path.dirname(__file__)
 if path:
     os.chdir(path)
-sys.path.insert(0, '../../')
+sys.path.insert(0, '../')
 
-from twitter_interface.stream_reader import stream_reader
 import config as config
-
                                
+
 class stream_reader_test(unittest.TestCase):
 
     def setUp(self):
