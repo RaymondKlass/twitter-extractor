@@ -1,11 +1,4 @@
 import unittest
-import sys, os, datetime, time
-
-path = os.path.dirname(__file__)
-if path:
-    os.chdir(path)
-sys.path.insert(0, '../../')
-
 from twitter_interface.message_parser import message_parser
 
 
