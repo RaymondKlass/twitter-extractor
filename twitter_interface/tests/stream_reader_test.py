@@ -1,6 +1,5 @@
 import unittest
 import sys, os, datetime, time
-import pika
 
 path = os.path.dirname(__file__)
 if path:
@@ -15,8 +14,11 @@ class stream_reader_test(unittest.TestCase):
 
     def setUp(self):
         self.tweets = []
-        self.test_queue = 'raw_twitter_automated_test'
-        self.stream_reader = stream_reader(config.data['twitter_credentials'], config.data['rabbitMQ_credentials'], self.test_queue)
+        self.stream_reader = stream_reader(config.data['twitter_credentials'], self._callback)
+    
+    
+    def _callback(data):
+        pass
     
     
     def test_filter(self):

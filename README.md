@@ -13,5 +13,3 @@ A general framework for working with the keyword twitter feed.  Information extr
 Dependencies:
 
 Tweepy library (provides basic twitter integration) https://github.com/tweepy/tweepy/
-RabbitMQ - (Messaging service for distributed workers) http://www.rabbitmq.com
-Pika - Python connection library for rabbitMQ message broker https://github.com/pika/pika
