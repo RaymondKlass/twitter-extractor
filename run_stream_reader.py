@@ -5,7 +5,6 @@ import config as config
 
 
 def processTexts(data):
-    print 'data_parse'
     m_parser = message_parser(data)
     if m_parser.contains('text', ['coors', 'coors lite', 'coors light', ]):
         print 'Coors Beer Tweet: '
