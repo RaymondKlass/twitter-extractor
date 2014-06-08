@@ -1,13 +1,10 @@
 import re 
-
-
-class iterableException(Exception):
-    pass
+from twitter_interface.exceptions import EmptySearchList
 
 
 
 class message_parser(object):
-""" Message parser to aid in message classification tasks """
+    """ Message parser to aid in message classification tasks """
     
     def __init__(self, message):
         self.message = message
@@ -41,7 +38,7 @@ class message_parser(object):
         try:
             el = search_list[0]
         except KeyError:
-            raise iterableException
+            raise EmptySearchList
         
         
         
