@@ -54,3 +54,6 @@ docs/_build/
 
 # Config
 /config
+
+# .DS_Store
+*.DS_Store
