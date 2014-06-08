@@ -1,5 +1,6 @@
 import unittest
 from twitter_interface.message_parser import message_parser
+from copy import deepcopy
 
 
 class message_parser_test(unittest.TestCase):
@@ -47,8 +48,6 @@ class message_parser_test(unittest.TestCase):
         message1 = {'text' : 'alpha numeric word bank'}
         parser1 = message_parser(message1)
         
-        # contains(self, field, search_list, case_sensitive = False, require_all = False):
-        
         self.assertTrue(parser1.contains('text', 'numeric'))
         self.assertTrue(parser1.contains('text', 'numeric', case_sensitive=True))
         self.assertTrue(not parser1.contains('text', 'numeriC', case_sensitive=True))
@@ -58,6 +57,34 @@ class message_parser_test(unittest.TestCase):
         self.assertTrue(parser1.contains('text', ['numeric'], require_all = True, case_sensitive=True))
         self.assertTrue(not parser1.contains('texted', 'numeric', require_all = True))
         
+        
+    def test_media_url(self):
+        
+        message = deepcopy(self.expected_message_format)
+        parser = message_parser(message)
+        
+        self.assertEqual(parser.media_url, [])
+        
+        message['entities'] = {'media' : [{'media_url' : 'http://www.example.com'}]}
+        parser = message_parser(message)
+        self.assertEqual(parser.media_url[0], 'http://www.example.com')
+        self.assertEqual(len(parser.media_url), 1)
+        
+        message['entities']['media'].append({'media_url' : 'http://www.example2.com'})
+        parser = message_parser(message)
+        self.assertEqual(parser.media_url[0], 'http://www.example.com')
+        self.assertEqual(parser.media_url[1], 'http://www.example2.com')
+        self.assertEqual(len(parser.media_url), 2)
+        
+        message['entities']['media'].append({'media_url' : 'http://www.example.com'})
+        parser = message_parser(message)
+        self.assertEqual(parser.media_url[0], 'http://www.example.com')
+        self.assertEqual(parser.media_url[1], 'http://www.example2.com')
+        self.assertEqual(len(parser.media_url), 2)
+        
+        
+    
+    
 
 if __name__ == '__main__':
     unittest.main()

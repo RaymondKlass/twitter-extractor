@@ -8,7 +8,18 @@ class message_parser(object):
     
     def __init__(self, message):
         self.message = message
-   
+        
+    
+    
+    @property
+    def media_url(self):
+        try:
+            return list(set([m['media_url'] for m in self.message['entities']['media']]))
+        except:
+            return []
+    
+        
+    
         
     def regex_parser(self, field, expression):
         """ Parses a message field based on a given regular expression """
