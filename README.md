@@ -1,4 +1,4 @@
-twitter-extractor
+Twitter Extractor
 =================
 
 General Framework for Extracting Information From a Twitter Feed
